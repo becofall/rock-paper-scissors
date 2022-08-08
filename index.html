@@ -9,61 +9,55 @@
     <script src="app.js"></script>
 </head>
 <body>
+    <button id="Rock">Rock</button>
+    <button id="Paper">Paper</button>
+    <button id="Scissors">Scissors</button>
+    <div id="round-results"></div>
+    <div id="score"></div>
+    <div id="game-results"></div>
+    
     <script>
-        function capitalize(string) {
-            return string.charAt(0).toUpperCase() + string.slice(1);
-        }
         
         //Pick random choice for computer
+        const roundResults = document.querySelector('round-results');
+        const score = document.querySelector('score');
+        const gameResults = document. querySelector('game-results');
+        let playerWinCounter = 0;
+        let computerWinCounter = 0;
+        
         function computerPlay() {
-            const choices = ["rock", "paper", "scissors"];
+            const choices = ["Rock", "Paper", "Scissors"];
             return choices[Math.floor(Math.random() * choices.length)];
         }
-        //console.log(computerPlay());
-        
-
-        //Get player choice
-        function getPlayerChoice() {
-            let playerChoice = prompt("Rock, paper, or scissors?");
-            console.log(playerChoice);
-            // if (playerSelection.toLowerCase != "rock" ||
-            //     playerSelection.toLowerCase != "paper" ||
-            //     playerSelection.toLowerCase != "scissors") {
-            //      playerSelection = prompt("Must choose Rock, paper, or scissors") 
-            // }
-            return playerChoice;
-        }
-
-        //let playerSelection = getPlayerChoice();
         const computerSelection = computerPlay();
+        
+        
+        const buttons = document.querySelectorAll('button');
+        
+        buttons.forEach((button) => {
+          button.addEventListener('click', (e) => {
+            console.log(button.id);
+            let playerChoice = button.id;
+            let computerChoice = computerPlay();
+            console.log(computerChoice);
+            console.log(playRound(playerChoice, computerChoice));
+            roundResults.append("Computer chose " + computerChoice + ". You chose " + 
+            button.id + ".");
+            
+          });        
+        });
 
         //Determine winner of round   
         function playRound(playerSelection, computerSelection) {
-            playerSelection.toLowerCase();
-            
             if (playerSelection === computerSelection) {
                 return "It's a tie!";
             } else if ((playerSelection === "rock" && computerSelection === "paper") ||
                 (playerSelection === "paper" && computerSelection === "scissors") ||
                 (playerSelection === "scissors" && computerSelection === "rock")) {
-                    return "You Lose! " + capitalize(computerSelection) + " beats " + capitalize(playerSelection);
+                    return "You Lose! " + computerSelection + " beats " + playerSelection;
             } 
-            return "You Win! " + capitalize(playerSelection) + " beats " + capitalize(computerSelection);
+            return "You Win! " + playerSelection + " beats " + computerSelection;
         }
-
-        //Run five rounds of game    
-        function game() {
-            for (let i = 0; i < 5; i++) {
-                playerSelection = getPlayerChoice();
-                
-                console.log(playerSelection);
-                console.log(playRound(playerSelection, computerSelection));
-            }
-        }
-
-        //console.log(playRound(playerSelection, computerSelection));
-        console.log(game());
-
     </script>
 </body>
 </html>
