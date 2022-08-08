@@ -12,6 +12,7 @@
     <button id="Rock">Rock</button>
     <button id="Paper">Paper</button>
     <button id="Scissors">Scissors</button>
+    <div id ="choices"></div>
     <div id="round-results"></div>
     <div id="score"></div>
     <div id="game-results"></div>
@@ -19,12 +20,19 @@
     <script>
         
         //Pick random choice for computer
-        const roundResults = document.querySelector('round-results');
-        const score = document.querySelector('score');
-        const gameResults = document. querySelector('game-results');
+        let choices = document.getElementById('choices');
+        let roundResults = document.getElementById('round-results');
+        let score = document.getElementById('score');
+        let gameResults = document.getElementById('game-results');
         let playerWinCounter = 0;
         let computerWinCounter = 0;
         
+        function disableButton() {
+            button.forEach((button) => {
+                button.disabled = true;
+            });
+        }
+
         function computerPlay() {
             const choices = ["Rock", "Paper", "Scissors"];
             return choices[Math.floor(Math.random() * choices.length)];
@@ -36,27 +44,45 @@
         
         buttons.forEach((button) => {
           button.addEventListener('click', (e) => {
-            console.log(button.id);
+            
+            //console.log(button.id);
+            
             let playerChoice = button.id;
             let computerChoice = computerPlay();
             console.log(computerChoice);
             console.log(playRound(playerChoice, computerChoice));
-            roundResults.append("Computer chose " + computerChoice + ". You chose " + 
-            button.id + ".");
             
+            if (playerWinCounter===5) {
+                gameResults.textContent = "You won 5 rounds and win the game! Reload to play again.";
+                disableButton();
+            }
+            if (computerWinCounter===5) {
+                gameResults.textContent = "The computer won 5 rounds. You lose the game! Reload to play again.";
+                disableButton();
+            }
           });        
         });
 
         //Determine winner of round   
         function playRound(playerSelection, computerSelection) {
-            if (playerSelection === computerSelection) {
-                return "It's a tie!";
-            } else if ((playerSelection === "rock" && computerSelection === "paper") ||
-                (playerSelection === "paper" && computerSelection === "scissors") ||
-                (playerSelection === "scissors" && computerSelection === "rock")) {
-                    return "You Lose! " + computerSelection + " beats " + playerSelection;
-            } 
-            return "You Win! " + playerSelection + " beats " + computerSelection;
+            if(playerWinCounter===5 || computerWinCounter===5) {
+                return null;
+            } else if (playerSelection === computerSelection) {
+                roundResults.textContent = "It's a tie!";
+                //return "It's a tie!";
+            } else if ((playerSelection === "Rock" && computerSelection === "Paper") ||
+                (playerSelection === "Paper" && computerSelection === "Scissors") ||
+                (playerSelection === "Scissors" && computerSelection === "Rock")) {
+                    roundResults.textContent = `You Lose! ${computerSelection} beats ${playerSelection}`;
+                    
+                    computerWinCounter++;
+                    //return "You Lose! " + computerSelection + " beats " + playerSelection;
+            } else {
+                roundResults.textContent = `You Win! ${playerSelection} beats ${computerSelection}`;
+                playerWinCounter++;
+                //return "You Win! " + playerSelection + " beats " + computerSelection;
+            }
+            score.textContent = `Current Score: Player--${playerWinCounter}     Computer--${computerWinCounter}`;
         }
     </script>
 </body>
